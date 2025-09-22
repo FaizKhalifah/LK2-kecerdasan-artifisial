@@ -1,9 +1,5 @@
 # Faiz
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import LabelEncoder
-
 
 # 1. Load dataset
 df = pd.read_csv("dataset/Coffee_sales.csv")
@@ -11,7 +7,6 @@ df = pd.read_csv("dataset/Coffee_sales.csv")
 # 2. Pilih fitur & target
 X = df[['hour_of_day', 'cash_type', 'Time_of_Day', 'Weekday']].copy()
 y = df['coffee_name']
-
 
 def deduce_coffee(hour_of_day, cash_type, time_of_day, weekday):
     if hour_of_day < 12:
