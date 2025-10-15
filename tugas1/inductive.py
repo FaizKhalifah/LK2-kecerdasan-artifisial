@@ -36,17 +36,23 @@ model = RandomForestClassifier(
 )
 model.fit(X_train, y_train)
 
-# 6. Evaluasi
-y_pred = model.predict(X_test)
-print("=== Hasil Induksi (ML) ===")
-print("Akurasi:", model.score(X_test, y_test))
-print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=label_y.classes_))
+new_data = pd.DataFrame([{
+    "hour_of_day": 9,
+    "cash_type": "card",
+    "Time_of_Day": "Morning",
+    "Weekday": "Mon",
+    "Month_name": "Jan"
+}])
 
-# 7. Confusion Matrix
-cm = confusion_matrix(y_test, y_pred)
-plt.figure(figsize=(10, 7))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=label_y.classes_, yticklabels=label_y.classes_)
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.title("Confusion Matrix - Coffee Prediction")
-plt.show()
+# Encode dengan encoder yang sudah dipakai
+for col in new_data.columns:
+    if col in encoders:
+        new_data.loc[:, col] = encoders[col].transform(new_data[col])
+
+# Prediksi
+y_new_pred = model.predict(new_data)
+coffee_pred = label_y.inverse_transform(y_new_pred)
+
+print("\n=== Prediksi Data Baru ===")
+print(new_data)
+print("Rekomendasi kopi:", coffee_pred[0])
